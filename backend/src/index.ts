@@ -16,7 +16,8 @@ app.get("/", async (req, res) => {
 
   res
     .status(200)
-    .header("Cache-Tag", "data")
+    .header("CDN-Cache-Control", "public, max-age=31536000, immutable")
+    .header("Cache-Control", "public, max-age=31536000, immutable")
     .header("Content-Type", "application/json")
     .send(data)
 });
@@ -38,7 +39,7 @@ app.post("/", async (req, res) => {
 
   await cloudflare.cache.purge({
     zone_id: env.CF_ZONE_ID,
-    tags: ["data"],
+    prefixes: ["cf-cdn-origin.wylynko.dev"]
   })
 
   res.status(200).send("ok")
