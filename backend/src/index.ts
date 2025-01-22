@@ -20,6 +20,12 @@ app.get("/", async (req, res) => {
     .send(data)
 });
 
+app.put("/", async (req, res) => {
+  await db
+    .update(schema.dataTable)
+    .set({ number: Math.floor(Math.random() * 100_000_000) })
+})
+
 const env = z.object({
   CF_API_TOKEN: z.string(),
   CF_ZONE_ID: z.string(),
@@ -31,19 +37,20 @@ const cloudflare = new Cloudflare({
 
 app.post("/", async (req, res) => {
 
-  await db
-    .update(schema.dataTable)
-    .set({ number: Math.floor(Math.random() * 100_000_000) })
+  const start = performance.now();
 
   const result = await cloudflare.cache.purge({
     zone_id: env.CF_ZONE_ID,
     files: ["https://cf-cdn-origin.wylynko.dev"]
   })
 
+  const end = performance.now();
+  const duration = end - start;
+
   res
     .status(200)
     .header("Content-Type", "application/json")
-    .send(result)
+    .send({ result, duration })
 });
 
 await app.listen({ port: 4000, host: "0.0.0.0" })
