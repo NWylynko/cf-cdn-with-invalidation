@@ -16,7 +16,7 @@ app.get("/", async (req, res) => {
 
   res
     .status(200)
-    .header("Cache-Control", "no-store")
+    .header("Cache-Control", "private, no-cache")
     .header("CDN-Cache-Control", "public, max-age=31536000")
     .header("Content-Type", "application/json")
     .send(data)
