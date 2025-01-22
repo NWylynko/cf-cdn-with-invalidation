@@ -22,8 +22,8 @@ app.get("/", async (req, res) => {
 });
 
 const env = z.object({
-  CF_API_TOKEN: z.string().url(),
-  CF_ZONE_ID: z.string().url(),
+  CF_API_TOKEN: z.string(),
+  CF_ZONE_ID: z.string(),
 }).parse(process.env)
 
 const cloudflare = new Cloudflare({
