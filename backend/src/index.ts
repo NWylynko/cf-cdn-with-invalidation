@@ -35,12 +35,15 @@ app.post("/", async (req, res) => {
     .update(schema.dataTable)
     .set({ number: Math.floor(Math.random() * 100_000_000) })
 
-  await cloudflare.cache.purge({
+  const result = await cloudflare.cache.purge({
     zone_id: env.CF_ZONE_ID,
     files: ["https://cf-cdn-origin.wylynko.dev"]
   })
 
-  res.status(200).send("ok")
+  res
+    .status(200)
+    .header("Content-Type", "application/json")
+    .send(result)
 });
 
 await app.listen({ port: 4000, host: "0.0.0.0" })
