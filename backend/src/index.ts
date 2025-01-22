@@ -39,7 +39,7 @@ app.post("/", async (req, res) => {
 
   await cloudflare.cache.purge({
     zone_id: env.CF_ZONE_ID,
-    prefixes: ["cf-cdn-origin.wylynko.dev"]
+    files: ["https://cf-cdn-origin.wylynko.dev"]
   })
 
   res.status(200).send("ok")
